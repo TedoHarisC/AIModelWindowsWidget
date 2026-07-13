@@ -1,6 +1,6 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { Maximize2, Minimize2, Activity, Settings, TrendingUp, BarChart2, Radio, Maximize } from 'lucide-react'
+import { Maximize2, Minimize2, Activity, Settings, TrendingUp, BarChart2, Radio, Maximize, Minus, X } from 'lucide-react'
 import { useStore } from './store/useStore'
 import Leaderboard from './components/Leaderboard'
 import CapabilityRadar from './components/CapabilityRadar'
@@ -11,6 +11,18 @@ import SettingsPanel from './components/Settings'
 
 function App() {
   const { isExpanded, toggleExpanded, activeTab, setActiveTab } = useStore()
+
+  const handleMinimize = () => {
+    if (window.electronAPI) {
+      window.electronAPI.minimizeWindow()
+    }
+  }
+
+  const handleClose = () => {
+    if (window.electronAPI) {
+      window.electronAPI.closeWindow()
+    }
+  }
 
   const tabs = [
     { id: 'leaderboard', icon: Activity, label: 'Leaderboard' },
@@ -29,12 +41,29 @@ function App() {
           <div className="w-2 h-2 rounded-full bg-cyber-primary shadow-[0_0_8px_#00f0ff] animate-pulse" />
           <span className="text-[10px] font-bold text-cyber-primary tracking-[0.2em]">SYS.INTEL_</span>
         </div>
-        <button 
-          onClick={toggleExpanded} 
-          className="no-drag p-1.5 hover:bg-cyber-primary/20 rounded transition-colors text-cyber-primary/70 hover:text-cyber-primary"
-        >
-          {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-        </button>
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={toggleExpanded} 
+            className="no-drag p-1.5 hover:bg-cyber-primary/20 rounded transition-colors text-cyber-primary/70 hover:text-cyber-primary"
+            title={isExpanded ? "Collapse" : "Expand"}
+          >
+            {isExpanded ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+          </button>
+          <button 
+            onClick={handleMinimize} 
+            className="no-drag p-1.5 hover:bg-cyber-primary/20 rounded transition-colors text-cyber-primary/70 hover:text-cyber-primary"
+            title="Minimize"
+          >
+            <Minus size={14} />
+          </button>
+          <button 
+            onClick={handleClose} 
+            className="no-drag p-1.5 hover:bg-red-500/20 rounded transition-colors text-cyber-primary/70 hover:text-red-400"
+            title="Close"
+          >
+            <X size={14} />
+          </button>
+        </div>
       </div>
 
       {/* Main Content Area */}

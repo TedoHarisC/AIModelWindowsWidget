@@ -55,6 +55,8 @@ declare global {
   interface Window {
     electronAPI?: {
       resizeWindow: (width: number, height: number) => Promise<void>
+      minimizeWindow: () => Promise<void>
+      closeWindow: () => Promise<void>
       storeGet: (key: string) => Promise<any>
       storeSet: (key: string, value: any) => Promise<void>
     }

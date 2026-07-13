@@ -60,6 +60,18 @@ app.on('window-all-closed', () => {
 })
 
 // IPC Handlers
+ipcMain.handle('minimize-window', () => {
+  if (mainWindow) {
+    mainWindow.minimize()
+  }
+})
+
+ipcMain.handle('close-window', () => {
+  if (mainWindow) {
+    mainWindow.close()
+  }
+})
+
 ipcMain.handle('resize-window', (_event, { width, height }) => {
   if (mainWindow) {
     mainWindow.setSize(width, height, true)
