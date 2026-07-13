@@ -1,34 +1,49 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useBenchmarks } from '../services/api'
-import { useStore } from '../store/useStore'
-import { Activity, ChevronUp, ChevronDown, Minus } from 'lucide-react'
+import { useStore, UseCase } from '../store/useStore'
+import { Activity, ChevronUp, ChevronDown, Minus, Filter } from 'lucide-react'
 
 export default function Leaderboard() {
   const { data: models, isLoading } = useBenchmarks()
-  const { weights } = useStore()
+  const { weights, useCase, setUseCase } = useStore()
   const [previousRanks, setPreviousRanks] = useState<Record<string, number>>({})
 
   const rankedModels = useMemo(() => {
     if (!models) return []
     const sumWeights = weights.sweBench + weights.liveBench + weights.terminalBench
-    const normalized = {
+    const norm = {
       swe: weights.sweBench / sumWeights,
       live: weights.liveBench / sumWeights,
       term: weights.terminalBench / sumWeights,
     }
 
     const calculated = models.map(m => {
-      const finalScore = (
-        (m.rawBenchmarks.sweBench * normalized.swe) +
-        (m.rawBenchmarks.liveBench * normalized.live) +
-        (m.rawBenchmarks.terminalBench * normalized.term)
-      ) / 10 // scale to 10
+      let finalScore = 0
+      
+      const benchScore = (m.rawBenchmarks.sweBench * norm.swe) +
+                         (m.rawBenchmarks.liveBench * norm.live) +
+                         (m.rawBenchmarks.terminalBench * norm.term)
+                         
+      if (useCase === 'balanced') {
+        finalScore = benchScore / 10
+      } else if (useCase === 'pure-coding') {
+        finalScore = (m.capabilities.bugFixing * 0.4 + m.capabilities.refactoring * 0.4 + benchScore * 0.2) / 10
+      } else if (useCase === 'agentic') {
+        finalScore = (m.capabilities.agentCoding * 0.5 + m.capabilities.toolUse * 0.3 + benchScore * 0.2) / 10
+      } else if (useCase === 'observing') {
+        finalScore = (m.capabilities.longContext * 0.5 + m.capabilities.codeReview * 0.3 + benchScore * 0.2) / 10
+      } else if (useCase === 'architecture') {
+        finalScore = (m.capabilities.architecture * 0.4 + m.capabilities.repoScale * 0.4 + benchScore * 0.2) / 10
+      } else if (useCase === 'media-gen') {
+        finalScore = (m.capabilities.mediaGen * 0.8 + benchScore * 0.2) / 10
+      }
+
       return { ...m, finalScore }
     })
 
     return calculated.sort((a, b) => b.finalScore - a.finalScore)
-  }, [models, weights])
+  }, [models, weights, useCase])
 
   useEffect(() => {
     if (rankedModels.length > 0) {
@@ -50,9 +65,26 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 px-1 text-cyber-primary border-b border-cyber-primary/20 pb-2 mb-4">
-        <Activity size={16} />
-        <h2 className="text-sm font-bold tracking-widest uppercase">Live Ranking</h2>
+      <div className="flex items-center justify-between px-1 text-cyber-primary border-b border-cyber-primary/20 pb-2 mb-4">
+        <div className="flex items-center gap-2">
+          <Activity size={16} />
+          <h2 className="text-sm font-bold tracking-widest uppercase">Live Ranking</h2>
+        </div>
+        <div className="flex items-center gap-1 bg-widget-dark p-1 rounded cyber-border">
+          <Filter size={12} className="text-cyber-primary" />
+          <select 
+            value={useCase} 
+            onChange={(e) => setUseCase(e.target.value as UseCase)}
+            className="bg-transparent text-[10px] text-cyber-primary uppercase tracking-wider outline-none cursor-pointer"
+          >
+            <option value="balanced" className="bg-widget-dark text-white">Balanced</option>
+            <option value="pure-coding" className="bg-widget-dark text-white">Pure Coding</option>
+            <option value="agentic" className="bg-widget-dark text-white">Agentic Work</option>
+            <option value="observing" className="bg-widget-dark text-white">Observing / Analysis</option>
+            <option value="architecture" className="bg-widget-dark text-white">Architecture</option>
+            <option value="media-gen" className="bg-widget-dark text-white">Image / Video Gen</option>
+          </select>
+        </div>
       </div>
       
       <div className="space-y-2 relative">

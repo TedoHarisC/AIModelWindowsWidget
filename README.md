@@ -61,23 +61,55 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
    ```
    This will start the Vite React development server and automatically launch the Electron widget.
 
-### Building for Production
-To package the app into a Windows executable (`.exe`):
+### 📦 Building for Production
+
+To package the app into a standalone Windows executable (`.exe` installer):
 ```bash
 npm run build
 ```
-The output file will be located in the `dist-electron` or `release` folder (depending on `electron-builder` config).
+The output file (e.g., `ai-model-widget-setup.exe`) will be generated in the `release/` or `dist-electron/` folder depending on your `electron-builder` configuration. You can distribute this file to users for a standard Windows installation.
+
+### 🔄 Auto-Start on Windows Login
+To have the widget automatically appear when you turn on your computer:
+1. Build and install the application using the steps above.
+2. Press `Win + R`, type `shell:startup`, and press Enter.
+3. Create a shortcut to the installed `.exe` and paste it into this Startup folder.
+
+---
+
+## 🔬 Research Methodology & Scoring Credibility
+
+As an AI-focused engineering tool, the integrity of our leaderboard is paramount. We do not rely on subjective vibes; the scores in this dashboard are synthesized from rigorous, industry-standard benchmarks to reflect true frontier capabilities.
+
+### Data Sources & Parameters
+- **SWE-Bench (Software Engineering Benchmark)**: Measures a model's ability to resolve real-world GitHub issues by autonomously editing code across large repositories. A high score indicates elite architectural reasoning and bug-fixing capabilities.
+- **LiveBench**: A continuously updated benchmark that evaluates mathematical reasoning, coding, and instruction following, specifically designed to prevent data contamination (models memorizing the test).
+- **TerminalBench**: Evaluates terminal and CLI environment mastery, a critical metric for "Agentic" workflows where models execute commands autonomously.
+
+### Dynamic Weighting Engine
+Because different developers have different needs, our ranking engine is not static. We employ a real-time capability matrix:
+- **Pure Coding**: Heavily biases `Refactoring` and `Bug Fixing` capabilities over general conversational logic.
+- **Agentic Work**: Prioritizes `Tool Use` and `Agent Coding`, calculating how well a model can operate independently.
+- **Observing / Analysis**: Prioritizes `Long Context` retrieval and `Code Review` accuracy for massive codebases.
+
+*By default, the UI simulates a live data feed to emulate real-time market fluctuations, serving as a placeholder until you connect your preferred LLM pricing API (e.g., OpenRouter or Artificial Analysis).*
+
+---
 
 ## 🎮 Usage Guide
 
 - **Moving the Widget**: Click and drag the top header bar (where it says `SYS.INTEL_`) to move the widget around your screen.
 - **Resizing**: Click the maximize/minimize icon in the top right corner to toggle between the compact (350x500) and expanded (450x900) views.
 - **Adjusting Weights**: Navigate to the **Settings** tab (gear icon at the bottom) and slide the range inputs to adjust how much SWE-Bench, LiveBench, or TerminalBench matters to your personal ranking. The main Leaderboard tab will reflect these changes immediately.
+- **Use-Case Filtering**: In the Leaderboard tab, use the top-right filter icon to instantly recalculate the entire global ranking based on your specific task requirements (e.g., Image Generation vs. Architecture).
 
 ## 🗺️ Roadmap
 - [ ] Direct API integrations with OpenRouter & Artificial Analysis for live production data.
 - [ ] Personalized Watchlist with Windows Toast Notifications on price drops or benchmark improvements.
 - [ ] Theme toggler (Light / Dark / Cyber).
+
+## 💖 Support
+If you like this project, please give this repository a star (⭐️)! Your support is highly appreciated and helps drive future updates and features.
 
 ## 📄 License
 This project is licensed under the MIT License.

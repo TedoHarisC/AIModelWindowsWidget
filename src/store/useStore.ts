@@ -6,6 +6,9 @@ export interface RankingWeights {
   terminalBench: number
 }
 
+export type Currency = 'USD' | 'IDR' | 'EUR' | 'GBP' | 'JPY' | 'AUD' | 'CAD' | 'SGD'
+export type UseCase = 'balanced' | 'pure-coding' | 'agentic' | 'observing' | 'architecture' | 'media-gen'
+
 interface WidgetState {
   isExpanded: boolean
   toggleExpanded: () => void
@@ -13,6 +16,10 @@ interface WidgetState {
   setActiveTab: (tab: 'leaderboard' | 'radar' | 'news' | 'settings' | 'compare') => void
   weights: RankingWeights
   setWeight: (key: keyof RankingWeights, value: number) => void
+  currency: Currency
+  setCurrency: (c: Currency) => void
+  useCase: UseCase
+  setUseCase: (u: UseCase) => void
 }
 
 export const useStore = create<WidgetState>((set) => ({
@@ -20,7 +27,6 @@ export const useStore = create<WidgetState>((set) => ({
   toggleExpanded: () => {
     set((state) => {
       const newState = !state.isExpanded
-      // Request Electron main process to resize window
       if (window.electronAPI) {
         if (newState) {
           window.electronAPI.resizeWindow(450, 900)
@@ -39,6 +45,10 @@ export const useStore = create<WidgetState>((set) => ({
     terminalBench: 30,
   },
   setWeight: (key, value) => set((state) => ({ weights: { ...state.weights, [key]: value } })),
+  currency: 'USD',
+  setCurrency: (c) => set({ currency: c }),
+  useCase: 'balanced',
+  setUseCase: (u) => set({ useCase: u }),
 }))
 
 declare global {
