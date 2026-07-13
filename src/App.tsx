@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { motion, AnimatePresence } from 'framer-motion'
 import { Maximize2, Minimize2, Activity, Settings, TrendingUp, BarChart2, Radio, Maximize } from 'lucide-react'
 import { useStore } from './store/useStore'

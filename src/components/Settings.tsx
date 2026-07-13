@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useBenchmarks } from '../services/api'
 import { useStore, Currency } from '../store/useStore'
 

@@ -37,6 +37,10 @@
   "build": {
     "appId": "com.aicoding.dashboard",
     "productName": "AI Coding Dashboard",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
     "win": {
       "target": "nsis"
     }

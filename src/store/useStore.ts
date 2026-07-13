@@ -12,8 +12,8 @@ export type UseCase = 'balanced' | 'pure-coding' | 'agentic' | 'observing' | 'ar
 interface WidgetState {
   isExpanded: boolean
   toggleExpanded: () => void
-  activeTab: 'leaderboard' | 'radar' | 'news' | 'settings' | 'compare'
-  setActiveTab: (tab: 'leaderboard' | 'radar' | 'news' | 'settings' | 'compare') => void
+  activeTab: 'leaderboard' | 'radar' | 'news' | 'settings' | 'compare' | 'context'
+  setActiveTab: (tab: 'leaderboard' | 'radar' | 'news' | 'settings' | 'compare' | 'context') => void
   weights: RankingWeights
   setWeight: (key: keyof RankingWeights, value: number) => void
   currency: Currency

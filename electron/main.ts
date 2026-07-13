@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import Store from 'electron-store'
 
 const store = new Store()
@@ -23,9 +22,9 @@ function createWindow() {
   })
 
   // Restore position if exists
-  const position = store.get('windowBounds') as { x: number, y: number } | undefined
-  if (position) {
-    mainWindow.setPosition(position.x, position.y)
+  const pos = store.get('window-position') as { x: number; y: number } | undefined
+  if (pos) {
+    mainWindow.setPosition(pos.x, pos.y)
   }
 
   // Load Vite dev server or production build
@@ -35,11 +34,11 @@ function createWindow() {
     mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
   }
 
-  // Save position on move
-  mainWindow.on('moved', () => {
+  // Save position on close
+  mainWindow.on('close', () => {
     if (mainWindow) {
       const [x, y] = mainWindow.getPosition()
-      store.set('windowBounds', { x, y })
+      store.set('window-position', { x, y })
     }
   })
 }
@@ -61,16 +60,16 @@ app.on('window-all-closed', () => {
 })
 
 // IPC Handlers
-ipcMain.handle('resize-window', (event, { width, height }) => {
+ipcMain.handle('resize-window', (_event, { width, height }) => {
   if (mainWindow) {
     mainWindow.setSize(width, height, true)
   }
 })
 
-ipcMain.handle('store-get', (event, key) => {
+ipcMain.handle('store-get', (_event, key) => {
   return store.get(key)
 })
 
-ipcMain.handle('store-set', (event, key, value) => {
+ipcMain.handle('store-set', (_event, key, value) => {
   store.set(key, value)
 })

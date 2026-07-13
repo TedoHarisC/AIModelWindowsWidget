@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useBenchmarks } from '../services/api'
 import { useStore, UseCase } from '../store/useStore'
